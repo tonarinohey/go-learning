@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        Name：
+        <input type ="text" id="nametxt">
+        Message:
+        <input type ="text" id="msgtxt">
+        <input type ="button" onclick="msgBtn()" value="送信">
+        <section>
+            <ul id="messages"></ul>
+        </section>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script>
+            const ws = new WebSocket('ws://localhost:9000/ws');
+            ws.addEventListener('message', function(e){
+                const msg = JSON.parse(e.data);
+                console.log(msg);
+                const new_element1 = document.createElement('li');
+                new_element1.textContent = msg.name + ': ' + msg.msg;
+                document.getElementById('messages').appendChild(new_element1);
+            });
+            const msgBtn = () => {
+                const nametxt = document.getElementById('nametxt');
+                const msgtxt = document.getElementById('msgtxt');
+                if (nametxt.value == '' || msgtxt.value == '') return;
+                const params = new URLSearchParams();
+                params.append('name', nametxt.value);
+                params.append('msg', msgtxt.value);
+                axios.post('/msg', params);
+                msgtxt.value = '';
+                return false;
+            }
+        </script>
+    </body>
+</html>

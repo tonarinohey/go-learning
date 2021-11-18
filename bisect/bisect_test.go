@@ -1,7 +1,7 @@
 package bisect_test
 
 import (
-	"bisect"
+	"github.com/go-learning/bisect"
 	"testing"
 )
 
